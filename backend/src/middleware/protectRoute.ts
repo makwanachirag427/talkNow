@@ -1,11 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import User, { type UserType } from "../models/user.model";
-import { Document } from "mongoose";
-
-interface req extends Request {
-  user?: UserType;
-}
+import User from "../models/user.model";
+import { req, UserType } from "../config/types";
 
 export const protectRoute = async (
   req: req,

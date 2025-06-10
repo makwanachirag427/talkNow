@@ -1,13 +1,7 @@
-import mongoose, { Document } from "mongoose";
+import mongoose from "mongoose";
+import { UserType } from "../config/types";
 
-export interface UserType extends Document {
- fullName: string;
-  email: string;
-  password: string;
-  profilePic?: string; 
-  createdAt?: Date; 
-  updatedAt?: Date; 
-}
+
 
 const userSchema = new mongoose.Schema<UserType>({
     fullName: {

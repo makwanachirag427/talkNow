@@ -1,15 +1,16 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import Message from "../models/message.model";
 import User from "../models/user.model";
 import cloudinary from "../config/cloudinary";
 import { getReceiverSocketId, io } from "../config/socket";
+import {type req } from "../config/types";
 
 export const usersForSidebar = async (
-  req: Request,
+  req: req,
   res: Response
 ): Promise<void> => {
   try {
-    const loggedInUserId = req.user._id;
+    const loggedInUserId = req.user?._id;
     const users = await User.find({
       _id: { $ne: loggedInUserId },
     }).select("-password");
@@ -25,12 +26,12 @@ export const usersForSidebar = async (
 };
 
 export const getMessages = async (
-  req: Request,
+  req: req,
   res: Response
 ): Promise<void> => {
   try {
     const { id: userToChatId } = req.params;
-    const myId = req.user._id;
+    const myId = req.user?._id;
 
     const messages = await Message.find({
       $or: [
@@ -51,13 +52,13 @@ export const getMessages = async (
 };
 
 export const sendMessage = async (
-  req: Request,
+  req: req,
   res: Response
 ): Promise<void> => {
   try {
     const { text, image } = req.body;
     const { id: receiverId } = req.params;
-    const senderId = req.user._id;
+    const senderId = req.user?._id;
 
     let imageUrl;
 

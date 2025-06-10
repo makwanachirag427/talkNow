@@ -1,11 +1,12 @@
-import { Request, Response } from "express"
+import {Response } from "express"
 import User from "../models/user.model"
 import bcrypt from "bcryptjs"
 import { generateToken } from "../config/token";
 import cloudinary from "../config/cloudinary";
+import {type req } from "../config/types";
 
 
-export const signup = async (req: Request, res: Response): Promise<void> => {
+export const signup = async (req: req, res: Response): Promise<void> => {
     try {
         const { fullName, password, email } = req.body;
 
@@ -60,7 +61,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 }
 
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login = async (req: req, res: Response): Promise<void> => {
     try {
         const { email, password } = req.body;
 
@@ -96,7 +97,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 }
 
 
-export const logout = async (req: Request, res: Response): Promise<void> => {
+export const logout = async (req: req, res: Response): Promise<void> => {
     try {
         res.clearCookie("jwt");
         res.status(200).json({ message: "Logged out successfully" });
@@ -111,7 +112,7 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
 }
 
 
-export const checkAuth = async (req: Request, res: Response): Promise<void> => {
+export const checkAuth = async (req: req, res: Response): Promise<void> => {
     try {
         res.status(200).json(req.user);
     } catch (error) {
@@ -124,10 +125,10 @@ export const checkAuth = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-export const updateProfile = async (req: Request, res: Response): Promise<void> => {
+export const updateProfile = async (req: req, res: Response): Promise<void> => {
     try {
         const { profilePic } = req.body;
-        const userId = req.user._id;
+        const userId = req.user?._id;
 
 
         if (!profilePic) {
