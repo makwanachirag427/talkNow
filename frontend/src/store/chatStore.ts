@@ -5,7 +5,6 @@ import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useAuthStore } from "./authStore";
 
-
 export const useChatStore = create<chatState>((set, get) => ({
   users: [],
   messages: [],
@@ -44,10 +43,13 @@ export const useChatStore = create<chatState>((set, get) => ({
     }
   },
   sendMessage: async (data) => {
-    const { selectedUser, messages } = get()
+    const { selectedUser, messages } = get();
     try {
-      const res = await axiosInstance.post(`/messages/send/${selectedUser?._id}`, data)
-      set({ messages: [...messages, res.data] })
+      const res = await axiosInstance.post(
+        `/messages/send/${selectedUser?._id}`,
+        data
+      );
+      set({ messages: [...messages, res.data] });
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data.message);
@@ -64,12 +66,15 @@ export const useChatStore = create<chatState>((set, get) => ({
 
     socket?.on("newMessage", (newMessage) => {
       if (newMessage.senderId !== selectedUser._id) return;
-      set({ messages: [...get().messages, newMessage] })
-    })
 
+      const existing = get().messages.some((msg) => msg._id === newMessage._id);
+      if (existing) return;
+
+      set({ messages: [...get().messages, newMessage] });
+    });
   },
   unsubscribeToMessages: () => {
     const socket = useAuthStore.getState().socket;
-    socket?.off("newMessage")
-  }
+    socket?.off("newMessage");
+  },
 }));
