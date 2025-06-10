@@ -21,7 +21,6 @@ export const useAuthStore = create<authState>((set, get) => ({
     try {
       const res = await axiosInstance.get("/auth/check");
       set({ authUser: res.data });
-      console.log(res.data);
       get().connectSocket();
     } catch (error) {
       console.log("Error in checkAuth ", error);
@@ -35,7 +34,6 @@ export const useAuthStore = create<authState>((set, get) => ({
     try {
       const res = await axiosInstance.post("auth/signup", FormData);
       set({ authUser: res.data });
-      console.log(res);
       toast.success("Account created successfully");
       get().connectSocket();
     } catch (error) {
