@@ -1,33 +1,39 @@
 import express from "express";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db";
 import cors from "cors";
-import { app, server } from "./config/socket"
+import { app, server } from "./config/socket";
+import path from "path";
 
-// routes 
+// routes
 import authRoutes from "./routes/auth.route";
-import messageRoutes from "./routes/message.route"
+import messageRoutes from "./routes/message.route";
 
 dotenv.config();
 const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
+app.use(
+  cors({
     origin: "http://localhost:5173",
     credentials: true,
-}))
-
+  })
+);
 
 app.use("/api/auth", authRoutes);
-app.use("/api/messages", messageRoutes)
+app.use("/api/messages", messageRoutes);
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
-
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../../frontend", "dist", "index.html"));
+  });
+}
 server.listen(PORT, () => {
-    connectDB();
-    console.log(`App listening on port http://localhost:${PORT}`)
-})
-
+  connectDB();
+  console.log(`App listening on port http://localhost:${PORT}`);
+});
