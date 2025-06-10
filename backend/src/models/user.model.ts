@@ -1,6 +1,15 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-const userSchema = new mongoose.Schema({
+export interface UserType extends Document {
+ fullName: string;
+  email: string;
+  password: string;
+  profilePic?: string; 
+  createdAt?: Date; 
+  updatedAt?: Date; 
+}
+
+const userSchema = new mongoose.Schema<UserType>({
     fullName: {
         type: String,
         required: true,

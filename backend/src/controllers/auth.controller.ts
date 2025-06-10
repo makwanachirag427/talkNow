@@ -41,7 +41,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         })
 
         if (newUser) {
-            generateToken(newUser._id.toString(), res);
+            generateToken(newUser._id as string, res);
             await newUser.save();
             newUser.password = "";
 
@@ -81,7 +81,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        generateToken(user._id.toString(), res);
+        generateToken(user._id as string, res);
         user.password = "";
 
         res.status(200).json(user);
