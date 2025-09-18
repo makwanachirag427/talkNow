@@ -6,7 +6,9 @@ import { AxiosError } from "axios";
 import { io } from "socket.io-client";
 
 const BASE_URL =
-  import.meta.env.MODE === "development" ? "http://localhost:5001" : "https://talknow-production.up.railway.app";
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5001"
+    : "https://talknow-production.up.railway.app";
 
 export const useAuthStore = create<authState>((set, get) => ({
   authUser: null,
@@ -102,6 +104,7 @@ export const useAuthStore = create<authState>((set, get) => ({
       query: {
         userId: authUser?._id,
       },
+      transports: ["websocket"],
     });
 
     socket.connect();
