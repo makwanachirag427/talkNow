@@ -4,14 +4,10 @@ import { Server } from "socket.io";
 
 export const app = express();
 export const server = http.createServer(app);
-const frontendUrl =
-  process.env.NODE_ENV === "development"
-    ? process.env.CLIENT_URL
-    : "https://talknow-jbol.onrender.com";
 
 export const io = new Server(server, {
   cors: {
-    origin: frontendUrl,
+    origin: ["http://localhost:5173", "https://talknow-jbol.onrender.com"],
   },
 });
 
